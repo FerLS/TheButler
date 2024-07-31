@@ -1,5 +1,5 @@
 // src/app/api/shopping/route.js
-import ShoppingItem from "@/modelsShoppingItem";
+import ShoppingItem from "@/model/ShoppingItem";
 import House from "@/model/House";
 import connectDB from "@/utils/db";
 import { NextResponse } from "next/server";
