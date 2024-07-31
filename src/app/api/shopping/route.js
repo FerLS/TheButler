@@ -1,8 +1,8 @@
 // src/app/api/shopping/route.js
-import ShoppingItem from '@/models/ShoppingItem';
-import House from '@/models/House';
-import connectDB from '@/utils/db';
-import { NextResponse } from 'next/server';
+import ShoppingItem from "@/modelsShoppingItem";
+import House from "@/model/House";
+import connectDB from "@/utils/db";
+import { NextResponse } from "next/server";
 
 export async function POST(request) {
   await connectDB();
@@ -12,12 +12,17 @@ export async function POST(request) {
     const newItem = new ShoppingItem({ item, house: houseId });
     await newItem.save();
 
-    await House.findByIdAndUpdate(houseId, { $push: { shoppingList: newItem._id } });
+    await House.findByIdAndUpdate(houseId, {
+      $push: { shoppingList: newItem._id },
+    });
 
     return NextResponse.json(newItem, { status: 201 });
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ message: 'Error creating shopping item' }, { status: 500 });
+    return NextResponse.json(
+      { message: "Error creating shopping item" },
+      { status: 500 }
+    );
   }
 }
 
@@ -31,6 +36,9 @@ export async function GET(request) {
     return NextResponse.json(shoppingList, { status: 200 });
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ message: 'Error fetching shopping list' }, { status: 500 });
+    return NextResponse.json(
+      { message: "Error fetching shopping list" },
+      { status: 500 }
+    );
   }
 }
