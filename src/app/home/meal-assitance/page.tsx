@@ -56,7 +56,7 @@ export default function MealAssitance() {
 
   return (
     <div className={" flex justify-center "}>
-      <div className="flex flex-col items-center justify-centers h-[100dvh] p-10 space-y-10 max-w-[768px] w-full">
+      <div className="flex flex-col items-center justify-centers h-[100dvh] p-10 pb-0 space-y-10 max-w-[768px] w-full">
         <div className=" w-full flex justify-start items-center space-x-5 ">
           <h1 className="text-4xl font-black text-left">Asistencia</h1>
           <UtensilsCrossed size={40}></UtensilsCrossed>
@@ -111,7 +111,7 @@ export default function MealAssitance() {
           )}
         </div>
         <Button
-          className="max-w-[768px] absolute bottom-0 text-xl font-black text-primary-foreground flex items-center justify-center space-x-2 w-screen h-20 rounded-b-none rounded-t-xl bg-primary"
+          className="max-w-[768px] sticky  min-h-20 bottom-0 text-xl font-black text-primary-foreground flex items-center justify-center space-x-2 w-screen rounded-b-none rounded-t-xl bg-primary"
           onClick={() => {
             router.push("/home");
           }}

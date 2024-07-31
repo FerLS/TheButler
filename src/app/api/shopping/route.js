@@ -12,15 +12,32 @@ export async function POST(request) {
     const newItem = new ShoppingItem({ item, house: houseId });
     await newItem.save();
 
-    await House.findByIdAndUpdate(houseId, {
-      $push: { shoppingList: newItem._id },
-    });
-
     return NextResponse.json(newItem, { status: 201 });
   } catch (error) {
     console.error(error);
     return NextResponse.json(
       { message: "Error creating shopping item" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PUT(request) {
+  await connectDB();
+
+  try {
+    const { id, checked } = await request.json();
+    const updatedItem = await ShoppingItem.findByIdAndUpdate(
+      id,
+      { checked },
+      { new: true }
+    );
+
+    return NextResponse.json(updatedItem, { status: 200 });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(
+      { message: "Error updating shopping item" },
       { status: 500 }
     );
   }

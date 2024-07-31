@@ -61,6 +61,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import axios from "axios";
 import { useMediaQuery } from "react-responsive";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 const playfair = Playfair_Display({
   weight: "700",
