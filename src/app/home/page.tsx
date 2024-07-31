@@ -137,11 +137,6 @@ export default function Home() {
           title: "Error",
           description: error.response.data.message,
         });
-      } else {
-        toast({
-          title: "Error",
-          description: "An unexpected error occurred",
-        });
       }
     }
   };
@@ -176,6 +171,7 @@ export default function Home() {
 
   const [username, setUsername] = React.useState("");
   const [houseID, setHouseID] = React.useState("");
+  const [onHouse, setOnHouse] = React.useState(false);
 
   useEffect(() => {
     const house = localStorage.getItem("houseID");
@@ -185,7 +181,8 @@ export default function Home() {
     });
     setUsername(localStorage.getItem("username") || "");
     setDefaultMeal(localStorage.getItem("defaultMeal") || "");
-    if (house != null && house != "undefined") {
+    if (house != null && house != "undefined" && house != "") {
+      setOnHouse(true);
       getMealValue();
     }
   }, []);
@@ -200,7 +197,9 @@ export default function Home() {
       const response = await axios.post("/api/house", {
         houseID,
       });
-      localStorage.setItem("houseID", response.data.houseID);
+      localStorage.setItem("houseID", houseID);
+      setMealValue("always");
+      setOnHouse(true);
       await axios.put("/api/auth/login", {
         username,
         houseID,
@@ -219,7 +218,6 @@ export default function Home() {
         user: username,
         confirmed: true,
       });
-      setMealValue("always");
       typewriterRef.current
         ?.deleteAll(15)
         .typeString("Hola, en que puedo ayudarte?")
@@ -242,7 +240,9 @@ export default function Home() {
   const joinHouse = async () => {
     try {
       const response = await axios.get(`/api/house/?houseID=${houseID}`);
-      localStorage.setItem("houseID", response.data.houseID);
+      localStorage.setItem("houseID", houseID);
+      setOnHouse(true);
+
       await axios.put("/api/auth/login", {
         username,
         houseID,
@@ -299,7 +299,7 @@ export default function Home() {
               typewriterRef.current = typewriter;
               typewriter
                 .typeString(
-                  houseID === ""
+                  !onHouse
                     ? "Por favor, indique el HouseID en ajustes para continuar"
                     : "Hola, en que puedo ayudarte?"
                 )
@@ -312,7 +312,7 @@ export default function Home() {
           <Button
             onClick={() => router.push("/home/shopping-list")}
             className="flex-1 space-x-6 hover:scale-110 transition-all "
-            disabled={houseID === ""}
+            disabled={!onHouse}
           >
             <p className="text-2xl font-bold text-left ">
               Lista de <br></br> la Compra{" "}
@@ -322,7 +322,7 @@ export default function Home() {
           <Button
             onClick={() => router.push("/home/meal-assitance")}
             variant="outline"
-            disabled={houseID === ""}
+            disabled={!onHouse}
             className="flex-1  space-x-6 hover:scale-110 transition-all"
           >
             <p className="text-2xl font-bold text-left">
@@ -341,9 +341,9 @@ export default function Home() {
                   changeMealValue(mealValue === "always" ? "never" : "always")
                 }
                 checked={mealValue === "always"}
-                disabled={houseID === ""}
+                disabled={!onHouse}
               ></Switch>
-              {houseID === "" && (
+              {!onHouse && (
                 <div className="w-[110%] h-[110%] absolute bg-black -bottom-1 -left-1 opacity-50"></div>
               )}
             </div>
