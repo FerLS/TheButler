@@ -12,7 +12,11 @@ export async function POST(request) {
     const existingConfirmation = await MealConfirmation.findOne({
       user: user,
       date: (() => {
-        const date = new Date();
+        const date =
+          new Date().getHours() >= 20
+            ? new Date(new Date().getTime() + 86400000)
+            : new Date();
+
         date.setHours(0, 0, 0, 0);
         return date;
       })(),
@@ -29,7 +33,10 @@ export async function POST(request) {
       houseID: houseID,
       user: user,
       date: (() => {
-        const date = new Date();
+        const date =
+          new Date().getHours() >= 20
+            ? new Date(new Date().getTime() + 86400000)
+            : new Date();
         date.setHours(0, 0, 0, 0);
         return date;
       })(),
@@ -59,7 +66,10 @@ export async function GET(request) {
       const mealConfirmations = await MealConfirmation.find({
         houseID: houseID,
         date: (() => {
-          const date = new Date();
+          const date =
+            new Date().getHours() >= 20
+              ? new Date(new Date().getTime() + 86400000)
+              : new Date();
           date.setHours(0, 0, 0, 0);
           return date;
         })(),
@@ -69,7 +79,10 @@ export async function GET(request) {
       const mealConfirmation = await MealConfirmation.findOne({
         user: user,
         date: (() => {
-          const date = new Date();
+          const date =
+            new Date().getHours() >= 20
+              ? new Date(new Date().getTime() + 86400000)
+              : new Date();
           date.setHours(0, 0, 0, 0);
           return date;
         })(),

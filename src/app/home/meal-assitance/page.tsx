@@ -60,7 +60,13 @@ export default function MealAssitance() {
         <div className=" w-full flex justify-start items-center space-x-5 ">
           <h1 className="text-4xl font-black text-left">Asistencia</h1>
           <UtensilsCrossed size={40}></UtensilsCrossed>
+          <p className="font-semibold italic text-3xl self-end text-right  flex-1">
+            Para el {new Date().toLocaleDateString()}
+          </p>
         </div>
+        <p className="text-left w-full italic opacity-50 text-lg">
+          Se puede confirmar la asistencia para mañana a partir de las 20:00
+        </p>
 
         <div className="flex flex-1 flex-col space-y-5 w-full">
           {!fetched ? (
@@ -106,10 +112,6 @@ export default function MealAssitance() {
                     /*Si es mas tarde de las 20:00 poner mañana, sino hoy */
                     new Date().getHours() >= 20 ? "mañana " : "hoy "
                   }
-                  -{" "}
-                  <span className="italic">
-                    {new Date().toLocaleDateString()}
-                  </span>
                 </p>
                 <Avatar>
                   <AvatarFallback>{name.charAt(0)}</AvatarFallback>
