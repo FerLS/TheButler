@@ -1,10 +1,17 @@
 "use client";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "@/components/ui/use-toast";
 import axios from "axios";
-import { Donut, SkipBack, Undo2, UtensilsCrossed } from "lucide-react";
+import {
+  Calendar,
+  Donut,
+  SkipBack,
+  Undo2,
+  UtensilsCrossed,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -60,13 +67,21 @@ export default function MealAssitance() {
         <div className=" w-full flex justify-start items-center space-x-5 ">
           <h1 className="text-4xl font-black text-left">Asistencia</h1>
           <UtensilsCrossed size={40}></UtensilsCrossed>
-          <p className="font-semibold italic text-3xl self-end text-right  flex-1">
-            Para el {new Date().toLocaleDateString()}
-          </p>
         </div>
-        <p className="text-left w-full italic opacity-50 text-lg">
-          Se puede confirmar la asistencia para mañana a partir de las 20:00
-        </p>
+
+        <div className="w-full flex flex-col space-y-4">
+          {" "}
+          <p className="text-left w-full italic opacity-50 text-lg">
+            Se puede confirmar la asistencia para mañana a partir de las 20:00
+          </p>
+          <div className="flex justify-start space-x-2">
+            {" "}
+            <Calendar></Calendar>
+            <p className="font-semibold italic text-xl text-left">
+              {new Date().toLocaleDateString()}
+            </p>
+          </div>
+        </div>
 
         <div className="flex flex-1 flex-col space-y-5 w-full">
           {!fetched ? (
