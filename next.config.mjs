@@ -10,7 +10,7 @@ import dbConnect from "./src/utils/db.js";
 const scheduleMealConfirmations = async () => {
   await dbConnect();
 
-  cron.schedule("20 16 * * *", async () => {
+  cron.schedule("24 16 * * *", async () => {
     try {
       const users = await User.find();
 
