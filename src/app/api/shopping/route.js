@@ -8,8 +8,16 @@ export async function POST(request) {
   await connectDB();
 
   try {
-    const { item, houseId } = await request.json();
-    const newItem = new ShoppingItem({ item, house: houseId });
+    const { item, houseID } = await request.json();
+
+    if (!item) {
+      return NextResponse.json(
+        { message: "Ponle un nombre al alimento" },
+        { status: 400 }
+      );
+    }
+
+    const newItem = new ShoppingItem({ item, houseID });
     await newItem.save();
 
     return NextResponse.json(newItem, { status: 201 });
@@ -33,6 +41,13 @@ export async function PUT(request) {
       { new: true }
     );
 
+    //Los items se eliminan en un dia si estan marcados como checked
+    if (checked) {
+      setTimeout(async () => {
+        await ShoppingItem.findByIdAndDelete(id);
+      }, 86400000);
+    }
+
     return NextResponse.json(updatedItem, { status: 200 });
   } catch (error) {
     console.error(error);
@@ -47,8 +62,9 @@ export async function GET(request) {
   await connectDB();
 
   try {
-    const { houseId } = request.query;
-    const shoppingList = await ShoppingItem.find({ house: houseId });
+    const { searchParams } = new URL(request.url);
+    const houseID = searchParams.get("houseID");
+    const shoppingList = await ShoppingItem.find({ house: houseID });
 
     return NextResponse.json(shoppingList, { status: 200 });
   } catch (error) {

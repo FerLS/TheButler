@@ -10,14 +10,14 @@ import dbConnect from "./src/utils/db.js";
 const scheduleMealConfirmations = async () => {
   await dbConnect();
 
-  cron.schedule("0 0  * * *", async () => {
+  cron.schedule("20 16 * * *", async () => {
     try {
       const users = await User.find();
 
-      for (const user of users) {
-        //Borrar las confirmaciones de comida de los usuarios
-        await MealConfirmation.deleteMany({ user: user.username });
+      //Delete all meal confirmations
+      await MealConfirmation.deleteMany();
 
+      for (const user of users) {
         const newMealConfirmation = new MealConfirmation({
           houseID: user.houseID,
           user: user.username,
