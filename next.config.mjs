@@ -1,5 +1,5 @@
 /** @type {import('next').NextConfig} */
-
+/*
 // next.config.js
 import cron from "node-cron";
 import User from "./src/model/User.js";
@@ -46,3 +46,4 @@ export default {
   },
   // Otras configuraciones
 };
+*/
