@@ -101,7 +101,15 @@ export default function MealAssitance() {
                 className="flex items-center justify-between w-full h-20 border-4 bg-primary-foreground rounded-xl p-4"
               >
                 <p className="text-xl">
-                  <span className="font-bold">{name}</span> va a comer
+                  <span className="font-bold">{name}</span> va a comer{" "}
+                  {
+                    /*Si es mas tarde de las 20:00 poner mañana, sino hoy */
+                    new Date().getHours() >= 20 ? "mañana " : "hoy "
+                  }
+                  -{" "}
+                  <span className="italic">
+                    {new Date().toLocaleDateString()}
+                  </span>
                 </p>
                 <Avatar>
                   <AvatarFallback>{name.charAt(0)}</AvatarFallback>
