@@ -2,7 +2,7 @@
   "crons": [
     {
       "path": "/api/cron",
-      "schedule": "57 16 * * *"
+      "schedule": "00 20 * * *"
     }
   ]
 }
