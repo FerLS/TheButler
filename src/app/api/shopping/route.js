@@ -64,6 +64,27 @@ export async function PUT(request) {
     );
   }
 }
+export async function DELETE(request) {
+  await connectDB();
+
+  try {
+    const { searchParams } = new URL(request.url);
+    const houseID = searchParams.get("houseID");
+
+    if (houseID === "_all") {
+      await ShoppingItem.deleteMany();
+      return NextResponse.json("Lista eliminada", { status: 200 });
+    }
+    await ShoppingItem.deleteMany({ houseID, checked: true });
+    return NextResponse.json("Lista eliminada", { status: 200 });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(
+      { message: "Error deleting shopping item" },
+      { status: 500 }
+    );
+  }
+}
 
 export async function GET(request) {
   await connectDB();
