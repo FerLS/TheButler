@@ -4,6 +4,7 @@ import { Checkbox } from "./ui/checkbox";
 export type ShoppingItemType = {
   id: string;
   name: string;
+  checked: boolean;
 };
 
 type ShoppingItemProps = {

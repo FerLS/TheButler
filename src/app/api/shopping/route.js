@@ -17,6 +17,12 @@ export async function POST(request) {
       );
     }
 
+    if (ShoppingItem.findOne({ item: item, houseID: houseID })) {
+      return NextResponse.json(
+        { message: "Ya existe un alimento con ese nombre" },
+        { status: 400 }
+      );
+    }
     const newItem = new ShoppingItem({ item, houseID });
     await newItem.save();
 
@@ -64,7 +70,7 @@ export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
     const houseID = searchParams.get("houseID");
-    const shoppingList = await ShoppingItem.find({ house: houseID });
+    const shoppingList = await ShoppingItem.find({ houseID: houseID });
 
     return NextResponse.json(shoppingList, { status: 200 });
   } catch (error) {

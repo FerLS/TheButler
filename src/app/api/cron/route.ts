@@ -3,6 +3,7 @@ import MealConfirmation from "@/model/MealConfirmation.js";
 import dbConnect from "@/utils/db.js";
 
 export const dynamic = "force-dynamic"; // static by default, unless reading the request
+export const revalidate = 0;
 
 export async function GET(request: Request) {
   await dbConnect();
