@@ -17,7 +17,8 @@ export async function POST(request) {
       );
     }
 
-    if (ShoppingItem.findOne({ item: item, houseID: houseID })) {
+    const existingItem = await ShoppingItem.findOne({ item, houseID });
+    if (existingItem) {
       return NextResponse.json(
         { message: "Ya existe un alimento con ese nombre" },
         { status: 400 }
