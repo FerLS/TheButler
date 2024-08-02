@@ -27,9 +27,9 @@ export async function GET(request: Request) {
         houseID: user.houseID,
         user: user.username,
         date: (() => {
-          const date = new Date();
-          date.setHours(0, 0, 0, 0);
-          return date;
+          return new Date().getHours() >= 20
+            ? new Date().setDate(new Date().getDate() + 1)
+            : new Date().toLocaleDateString();
         })(),
         confirmed: user.defaultMeal,
       });
