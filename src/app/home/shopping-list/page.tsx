@@ -38,6 +38,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const ShoppingList = () => {
   const router = useRouter();
@@ -49,7 +50,7 @@ const ShoppingList = () => {
 
   const [houseID, setHouseID] = useState("");
   const [itemName, setItemName] = useState("");
-
+  const [fetched, setFetched] = useState(false);
   interface ShoppingRecord {
     _id: string;
     item: string;
@@ -87,6 +88,8 @@ const ShoppingList = () => {
       const response = await axios.get(
         `/api/shopping/?houseID=${localStorage.getItem("houseID")}`
       );
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
       const shoppingList: ShoppingItemType[] = (
         response.data as ShoppingRecord[]
       ).map((record: ShoppingRecord) => ({
@@ -96,6 +99,7 @@ const ShoppingList = () => {
       }));
 
       setShoppingList(shoppingList);
+      setFetched(true);
 
       const checkedItems: { [key: string]: boolean } = {};
       shoppingList.forEach((item) => {
@@ -184,14 +188,86 @@ const ShoppingList = () => {
 
         <h1 className="text-xl font-extrabold ">En trabajo...</h1> */}
           <div className="p-10 w-full space-y-10 flex-1 ">
-            {shoppingList.length === 0 ? (
-              <div className="flex justify-center items-center flex-col h-full space-y-10">
-                <Notebook size={100} strokeWidth={1}></Notebook>
+            {fetched ? (
+              <>
+                {" "}
+                {shoppingList.length === 0 ? (
+                  <div className="flex justify-center items-center flex-col h-full space-y-10">
+                    <Notebook size={100} strokeWidth={1}></Notebook>
 
-                <h1 className="text-xl font-extrabold text-center ">
-                  La lista de la <br></br>compra esta vacia
-                </h1>
-              </div>
+                    <h1 className="text-xl font-extrabold text-center ">
+                      La lista de la <br></br>compra esta vacia
+                    </h1>
+                  </div>
+                ) : (
+                  <>
+                    {" "}
+                    <div className="w-full space-y-5 flex flex-col ">
+                      <h2 className="font-bold text-xl w-full text-right">
+                        Sin Comprar
+                      </h2>
+
+                      {uncheckedItemsList.length === 0 ? (
+                        <div className="flex justify-between  opacity-75">
+                          <p className="font-semibold">La nevera esta llena!</p>
+                          <Refrigerator> </Refrigerator>
+                        </div>
+                      ) : (
+                        <>
+                          {uncheckedItemsList.map((item) => (
+                            <>
+                              {uncheckedItemsList.indexOf(item) !== 0 && (
+                                <Separator />
+                              )}
+
+                              <ShoppingItem
+                                key={item.id}
+                                id={item.id}
+                                name={item.name}
+                                checked={
+                                  shoppingList.find((i) => i.id === item.id)
+                                    ?.checked || false
+                                }
+                                onCheck={handleCheck}
+                              />
+                            </>
+                          ))}
+                        </>
+                      )}
+                    </div>
+                    <Separator className="bg-primary h-1 rounded-full" />
+                    <div className="w-full space-y-5 flex flex-col ">
+                      <h2 className="font-bold text-xl w-full text-right">
+                        Comprados
+                      </h2>
+
+                      {checkedItemsList.length === 0 ? (
+                        <div className="flex justify-between  opacity-75">
+                          <p className="font-semibold">
+                            Rellenando la despensa...
+                          </p>
+                          <Coffee> </Coffee>
+                        </div>
+                      ) : (
+                        <>
+                          {checkedItemsList.map((item) => (
+                            <ShoppingItem
+                              key={item.id}
+                              id={item.id}
+                              name={item.name}
+                              checked={
+                                shoppingList.find((i) => i.id === item.id)
+                                  ?.checked || false
+                              }
+                              onCheck={handleCheck}
+                            />
+                          ))}
+                        </>
+                      )}
+                    </div>
+                  </>
+                )}
+              </>
             ) : (
               <>
                 {" "}
@@ -199,62 +275,17 @@ const ShoppingList = () => {
                   <h2 className="font-bold text-xl w-full text-right">
                     Sin Comprar
                   </h2>
-
-                  {uncheckedItemsList.length === 0 ? (
-                    <div className="flex justify-between  opacity-75">
-                      <p className="font-semibold">La nevera esta llena!</p>
-                      <Refrigerator> </Refrigerator>
-                    </div>
-                  ) : (
-                    <>
-                      {uncheckedItemsList.map((item) => (
-                        <>
-                          {uncheckedItemsList.indexOf(item) !== 0 && (
-                            <Separator />
-                          )}
-
-                          <ShoppingItem
-                            key={item.id}
-                            id={item.id}
-                            name={item.name}
-                            checked={
-                              shoppingList.find((i) => i.id === item.id)
-                                ?.checked || false
-                            }
-                            onCheck={handleCheck}
-                          />
-                        </>
-                      ))}
-                    </>
-                  )}
+                  <Skeleton className="h-10 w-full"></Skeleton>
+                  <Skeleton className="h-10 w-full"></Skeleton>
                 </div>
                 <Separator className="bg-primary h-1 rounded-full" />
                 <div className="w-full space-y-5 flex flex-col ">
                   <h2 className="font-bold text-xl w-full text-right">
                     Comprados
                   </h2>
-
-                  {checkedItemsList.length === 0 ? (
-                    <div className="flex justify-between  opacity-75">
-                      <p className="font-semibold">Rellenando la despensa...</p>
-                      <Coffee> </Coffee>
-                    </div>
-                  ) : (
-                    <>
-                      {checkedItemsList.map((item) => (
-                        <ShoppingItem
-                          key={item.id}
-                          id={item.id}
-                          name={item.name}
-                          checked={
-                            shoppingList.find((i) => i.id === item.id)
-                              ?.checked || false
-                          }
-                          onCheck={handleCheck}
-                        />
-                      ))}
-                    </>
-                  )}
+                  <Skeleton className="h-10 w-full"></Skeleton>
+                  <Skeleton className="h-10 w-full"></Skeleton>
+                  <Skeleton className="h-10 w-full"></Skeleton>
                 </div>
               </>
             )}
