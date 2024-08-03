@@ -128,11 +128,7 @@ export default function Home() {
   const getMealValue = async () => {
     try {
       const response = await axios.get(
-        `/api/meal?user=${localStorage.getItem("username")}&date=${
-          new Date().getHours() >= 20
-            ? new Date().setDate(new Date().getDate() + 1)
-            : new Date().toLocaleDateString()
-        }`
+        `/api/meal?user=${localStorage.getItem("username")}`
       );
       setMealValue(response.data.confirmed ? "always" : "never");
     } catch (error: any) {

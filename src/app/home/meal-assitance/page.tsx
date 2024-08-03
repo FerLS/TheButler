@@ -32,11 +32,7 @@ export default function MealAssitance() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `/api/meal?houseID=${localStorage.getItem("houseID")}&date=${
-            new Date().getHours() >= 20
-              ? new Date().setDate(new Date().getDate() + 1)
-              : new Date().toLocaleDateString()
-          }`
+          `/api/meal?houseID=${localStorage.getItem("houseID")}`
         );
         //await 1 second
         await new Promise((resolve) => setTimeout(resolve, 500));
@@ -83,7 +79,7 @@ export default function MealAssitance() {
             <Calendar></Calendar>
             <p className="font-semibold italic text-xl text-left">
               {new Date().getHours() >= 20
-                ? new Date().setDate(new Date().getDate() + 1)
+                ? new Date().setDate(new Date().getDate() + 1).toLocaleString()
                 : new Date().toLocaleDateString()}
             </p>
           </div>

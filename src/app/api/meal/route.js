@@ -61,18 +61,15 @@ export async function GET(request) {
     const { searchParams } = new URL(request.url);
     const houseID = searchParams.get("houseID");
     const user = searchParams.get("user");
-    const date = searchParams.get("date");
 
     if (houseID) {
       const mealConfirmations = await MealConfirmation.find({
         houseID: houseID,
-        date: date,
       });
       return NextResponse.json(mealConfirmations, { status: 200 });
     } else if (user) {
       const mealConfirmation = await MealConfirmation.findOne({
         user: user,
-        date: date,
       });
       return NextResponse.json(mealConfirmation, { status: 200 });
     }
