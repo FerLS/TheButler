@@ -335,7 +335,7 @@ export default function Home() {
           <div className="flex flex-1 max-h-[15%] space-x-4">
             <div className="flex justify-between items-center border-2 bg-primary-foreground  rounded-lg w-[70%] px-4 relative overflow-hidden">
               <p className="font-semibold flex items-center space-x-2  ">
-                Voy a comer hoy
+                Voy a comer {new Date().getHours() >= 20 ? "mañana" : "hoy"}
               </p>{" "}
               <Switch
                 onClick={() =>

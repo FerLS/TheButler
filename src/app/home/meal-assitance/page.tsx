@@ -63,29 +63,33 @@ export default function MealAssitance() {
 
   return (
     <div className={" flex justify-center "}>
-      <div className="flex flex-col items-center justify-centers h-[100dvh] p-10 pb-0 space-y-10 max-w-[768px] w-full">
-        <div className=" w-full flex justify-start items-center space-x-5 ">
-          <h1 className="text-4xl font-black text-left">Asistencia</h1>
-          <UtensilsCrossed size={40}></UtensilsCrossed>
-        </div>
+      <div className="flex flex-col items-center justify-centers h-[100dvh]  pb-0  max-w-[768px] w-full">
+        <div className="space-y-10 p-10">
+          <div className=" w-full flex justify-start items-center space-x-5 ">
+            <h1 className="text-4xl font-black text-left">Asistencia</h1>
+            <UtensilsCrossed size={40}></UtensilsCrossed>
+          </div>
 
-        <div className="w-full flex flex-col space-y-4">
-          {" "}
-          <p className="text-left w-full italic opacity-50 text-lg">
-            Se puede confirmar la asistencia para mañana a partir de las 20:00
-          </p>
-          <div className="flex justify-start space-x-2">
+          <div className="w-full flex flex-col space-y-4">
             {" "}
-            <Calendar></Calendar>
-            <p className="font-semibold italic text-xl text-left">
-              {new Date().getHours() >= 20
-                ? new Date().setDate(new Date().getDate() + 1).toLocaleString()
-                : new Date().toLocaleDateString()}
+            <p className="text-left w-full italic opacity-50 text-lg">
+              Se puede confirmar la asistencia para mañana a partir de las 20:00
             </p>
+            <div className="flex justify-start space-x-2">
+              {" "}
+              <Calendar></Calendar>
+              <p className="font-semibold italic text-xl text-left">
+                {new Date().getHours() >= 20
+                  ? new Date()
+                      .setDate(new Date().getDate() + 1)
+                      .toLocaleString()
+                  : new Date().toLocaleDateString()}
+              </p>
+            </div>
           </div>
         </div>
 
-        <div className="flex flex-1 flex-col space-y-5 w-full">
+        <div className="flex flex-1 flex-col space-y-5 w-full bg-primary-foreground p-10 rounded-t-xl">
           {!fetched ? (
             <>
               <Skeleton className="flex items-center justify-between w-full h-20 border-4 bg-primary-foreground rounded-xl p-4 space-x-4">
@@ -121,7 +125,7 @@ export default function MealAssitance() {
             assistance.map((name, index) => (
               <section
                 key={index}
-                className="flex items-center justify-between w-full h-20 border-4 bg-primary-foreground rounded-xl p-4"
+                className="flex items-center justify-between w-full h-20 border-4 bg-card rounded-xl p-4"
               >
                 <p className="text-xl">
                   <span className="font-bold">{name}</span> va a comer{" "}
