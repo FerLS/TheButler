@@ -64,7 +64,7 @@ export async function GET(request) {
           houseID: houseID,
           user: user.username,
           date: date,
-          confirmed: user.confirmed,
+          confirmed: user.defaultMeal,
         });
         await confirmation.save();
         mealConfirmations.push(confirmation);
