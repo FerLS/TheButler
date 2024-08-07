@@ -28,6 +28,7 @@ import { set } from "mongoose";
 
 export default function MealAssitance() {
   const router = useRouter();
+  const [mealValue, setMealValue] = useState(false);
   const [assistance, setAssistance] = useState<string[]>([]);
   const [fetched, setFetched] = useState(false);
   const [username, setUsername] = useState("");
@@ -55,6 +56,9 @@ export default function MealAssitance() {
         .map((record: HouseRecord) => record.user);
 
       setAssistance(confirmedUsers);
+      setMealValue(
+        confirmedUsers.includes(localStorage.getItem("username") || "")
+      );
       setFetched(true);
     } catch (error: any) {
       if (error.response) {
@@ -94,6 +98,8 @@ export default function MealAssitance() {
 
   const changeMealValue = async (value: boolean) => {
     try {
+      setMealValue(value);
+
       await axios.post("/api/meal", {
         houseID: localStorage.getItem("houseID"),
         user: localStorage.getItem("username"),
@@ -102,6 +108,8 @@ export default function MealAssitance() {
       });
       fetchData(date);
     } catch (error: any) {
+      setMealValue(!value);
+
       if (error.response) {
         toast({
           variant: "destructive",
@@ -130,7 +138,7 @@ export default function MealAssitance() {
             {" "}
             <div className="flex space-x-4 ">
               <Switch
-                checked={assistance.includes(username)}
+                checked={mealValue}
                 onCheckedChange={(value) => {
                   changeMealValue(value);
                 }}

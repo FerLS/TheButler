@@ -1,5 +1,6 @@
 // src/app/api/meal-confirmation/route.js
 import MealConfirmation from "@/model/MealConfirmation";
+import User from "@/model/User";
 import connectDB from "@/utils/db";
 import { NextResponse } from "next/server";
 
@@ -45,27 +46,32 @@ export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
     const houseID = searchParams.get("houseID");
-    const user = searchParams.get("user");
     const date = searchParams.get("date");
 
-    if (houseID) {
-      const mealConfirmations = await MealConfirmation.find({
-        houseID: houseID,
-        date: date,
-      });
-      return NextResponse.json(mealConfirmations, { status: 200 });
-    } else if (user) {
+    const users = await User.find({ houseID: houseID });
+    const mealConfirmations = [];
+
+    for (const user of users) {
       const mealConfirmation = await MealConfirmation.findOne({
-        user: user,
+        user: user.username,
         date: date,
       });
-      return NextResponse.json(mealConfirmation, { status: 200 });
+
+      if (mealConfirmation) {
+        mealConfirmations.push(mealConfirmation);
+      } else {
+        const confirmation = new MealConfirmation({
+          houseID: houseID,
+          user: user.username,
+          date: date,
+          confirmed: user.confirmed,
+        });
+        await confirmation.save();
+        mealConfirmations.push(confirmation);
+      }
     }
 
-    return NextResponse.json(
-      { message: "User dont exists in MealDatabase" },
-      { status: 400 }
-    );
+    return NextResponse.json(mealConfirmations, { status: 200 });
   } catch (error) {
     console.error(error);
     return NextResponse.json(

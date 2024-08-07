@@ -115,6 +115,7 @@ export default function Home() {
           .start();
       }
     } catch (error: any) {
+      setMealValue(!value);
       if (error.response) {
         toast({
           variant: "destructive",
@@ -136,11 +137,17 @@ export default function Home() {
       date.setHours(0, 0, 0, 0);
 
       const response = await axios.get(
-        `/api/meal?user=${localStorage.getItem(
-          "username"
+        `/api/meal?houseID=${localStorage.getItem(
+          "houseID"
         )}&date=${date.getTime()} `
       );
-      setMealValue(response.data.confirmed);
+      const mealList = response.data;
+      const mealValue = mealList.some(
+        (meal: any) =>
+          meal.user === localStorage.getItem("username") && meal.confirmed
+      );
+
+      setMealValue(mealValue);
     } catch (error: any) {
       if (error.response) {
         toast({

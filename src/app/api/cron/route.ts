@@ -11,9 +11,6 @@ export async function GET(request: Request) {
   try {
     const users = await User.find();
 
-    //Delete all meal confirmations
-    await MealConfirmation.deleteMany();
-
     for (const user of users) {
       if (
         user.houseID === null ||
@@ -22,19 +19,6 @@ export async function GET(request: Request) {
       ) {
         continue;
       }
-
-      const newMealConfirmation = new MealConfirmation({
-        houseID: user.houseID,
-        user: user.username,
-        date: (() => {
-          return new Date().getHours() >= 20
-            ? new Date().setDate(new Date().getDate() + 1)
-            : new Date().toLocaleDateString();
-        })(),
-        confirmed: user.defaultMeal,
-      });
-
-      await newMealConfirmation.save();
     }
 
     console.log("Meal confirmations created successfully.");
