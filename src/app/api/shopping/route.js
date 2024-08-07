@@ -44,7 +44,7 @@ export async function PUT(request) {
     const { id, checked } = await request.json();
     const updatedItem = await ShoppingItem.findByIdAndUpdate(
       id,
-      { checked },
+      { checked, buyed: new Date() },
       { new: true }
     );
 

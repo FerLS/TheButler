@@ -7,19 +7,11 @@ export async function POST(request) {
   await connectDB();
 
   try {
-    const { houseID, user, confirmed } = await request.json();
+    const { houseID, user, confirmed, date } = await request.json();
 
     const existingConfirmation = await MealConfirmation.findOne({
       user: user,
-      date: (() => {
-        const date =
-          new Date().getHours() >= 20
-            ? new Date(new Date().getTime() + 86400000)
-            : new Date();
-
-        date.setHours(0, 0, 0, 0);
-        return date;
-      })(),
+      date: date,
     });
 
     if (existingConfirmation) {
@@ -32,14 +24,7 @@ export async function POST(request) {
     const confirmation = new MealConfirmation({
       houseID: houseID,
       user: user,
-      date: (() => {
-        const date =
-          new Date().getHours() >= 20
-            ? new Date(new Date().getTime() + 86400000)
-            : new Date();
-        date.setHours(0, 0, 0, 0);
-        return date;
-      })(),
+      date: date,
       confirmed,
     });
     await confirmation.save();
@@ -61,15 +46,18 @@ export async function GET(request) {
     const { searchParams } = new URL(request.url);
     const houseID = searchParams.get("houseID");
     const user = searchParams.get("user");
+    const date = searchParams.get("date");
 
     if (houseID) {
       const mealConfirmations = await MealConfirmation.find({
         houseID: houseID,
+        date: date,
       });
       return NextResponse.json(mealConfirmations, { status: 200 });
     } else if (user) {
       const mealConfirmation = await MealConfirmation.findOne({
         user: user,
+        date: date,
       });
       return NextResponse.json(mealConfirmation, { status: 200 });
     }

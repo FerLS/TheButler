@@ -56,6 +56,8 @@ const ShoppingList = () => {
     item: string;
     houseID: string;
     checked: boolean;
+    added: Date;
+    buyed: Date;
     __v: number;
   }
 
@@ -63,7 +65,9 @@ const ShoppingList = () => {
     try {
       setShoppingList((prev) =>
         prev.map((item) =>
-          item.id === id ? { ...item, checked: checked } : item
+          item.id === id
+            ? { ...item, checked: checked, buyed: new Date() }
+            : item
         )
       );
       axios.put(`/api/shopping/`, { id: id, checked: checked });
@@ -96,6 +100,8 @@ const ShoppingList = () => {
         id: record._id,
         name: record.item,
         checked: record.checked,
+        added: record.added,
+        buyed: record.buyed,
       }));
 
       setShoppingList(shoppingList);
@@ -131,7 +137,13 @@ const ShoppingList = () => {
       const newRecord: ShoppingRecord = response.data;
       setShoppingList((prev) => [
         ...prev,
-        { id: newRecord._id, name: newRecord.item, checked: newRecord.checked },
+        {
+          id: newRecord._id,
+          name: newRecord.item,
+          checked: newRecord.checked,
+          added: newRecord.added,
+          buyed: newRecord.buyed,
+        },
       ]);
     } catch (error: any) {
       if (error.response) {
@@ -187,7 +199,7 @@ const ShoppingList = () => {
           {/*  <Wrench size={100} strokeWidth={1}></Wrench>
 
         <h1 className="text-xl font-extrabold ">En trabajo...</h1> */}
-          <div className="p-10 w-full space-y-10 flex-1 ">
+          <div className="p-10 w-full space-y-10 flex-1  max-w-full">
             {fetched ? (
               <>
                 {" "}
@@ -224,6 +236,8 @@ const ShoppingList = () => {
                                 key={item.id}
                                 id={item.id}
                                 name={item.name}
+                                added={item.added}
+                                buyed={item.buyed}
                                 checked={
                                   shoppingList.find((i) => i.id === item.id)
                                     ?.checked || false
@@ -255,6 +269,8 @@ const ShoppingList = () => {
                               key={item.id}
                               id={item.id}
                               name={item.name}
+                              added={item.added}
+                              buyed={item.buyed}
                               checked={
                                 shoppingList.find((i) => i.id === item.id)
                                   ?.checked || false

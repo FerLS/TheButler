@@ -85,20 +85,25 @@ export default function Home() {
   const router = useRouter();
 
   const [open, setOpen] = React.useState(false);
-  const [mealValue, setMealValue] = React.useState("always");
+  const [mealValue, setMealValue] = React.useState(true);
   const [defaultMeal, setDefaultMeal] = React.useState("always");
 
-  const changeMealValue = async (value: string) => {
+  const changeMealValue = async (value: boolean) => {
     setMealValue(value);
 
     try {
       await axios.post("/api/meal", {
         houseID,
         user: username,
-        confirmed: value === "always",
+        date: (() => {
+          const date = new Date();
+          date.setHours(0, 0, 0, 0);
+          return date;
+        })(),
+        confirmed: value,
       });
 
-      if (value === "always") {
+      if (value) {
         typewriterRef.current
           ?.deleteAll(15)
           .typeString("Ok, te vere en la mesa")
@@ -127,10 +132,15 @@ export default function Home() {
 
   const getMealValue = async () => {
     try {
+      const date = new Date();
+      date.setHours(0, 0, 0, 0);
+
       const response = await axios.get(
-        `/api/meal?user=${localStorage.getItem("username")}`
+        `/api/meal?user=${localStorage.getItem(
+          "username"
+        )}&date=${date.getTime()} `
       );
-      setMealValue(response.data.confirmed ? "always" : "never");
+      setMealValue(response.data.confirmed);
     } catch (error: any) {
       if (error.response) {
         toast({
@@ -199,7 +209,7 @@ export default function Home() {
         houseID,
       });
       localStorage.setItem("houseID", houseID);
-      setMealValue("always");
+      setMealValue(true);
       setOnHouse(true);
       await axios.put("/api/auth/login", {
         username,
@@ -262,7 +272,7 @@ export default function Home() {
         user: username,
         confirmed: true,
       });
-      setMealValue("always");
+      setMealValue(true);
       typewriterRef.current
         ?.deleteAll(15)
         .typeString("Hola, en que puedo ayudarte?")
@@ -335,13 +345,11 @@ export default function Home() {
           <div className="flex flex-1 max-h-[15%] space-x-4">
             <div className="flex justify-between items-center border-2 bg-primary-foreground  rounded-lg w-[70%] px-4 relative overflow-hidden">
               <p className="font-semibold flex items-center space-x-2  ">
-                Voy a comer {new Date().getHours() >= 20 ? "mañana" : "hoy"}
+                Voy a comer hoy
               </p>{" "}
               <Switch
-                onClick={() =>
-                  changeMealValue(mealValue === "always" ? "never" : "always")
-                }
-                checked={mealValue === "always"}
+                onClick={() => changeMealValue(!mealValue)}
+                checked={mealValue}
                 disabled={!onHouse}
               ></Switch>
               {!onHouse && (
