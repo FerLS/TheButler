@@ -58,7 +58,7 @@ export async function PUT(request) {
     return NextResponse.json({ message: "User not found" }, { status: 400 });
   }
 
-  if (houseID != user.houseID) {
+  if (houseID != user.houseID || defaultMeal != user.defaultMeal) {
     //Borrar las confirmaciones de comida de los usuarios
     await MealConfirmation.deleteMany({ user: user.username });
   }
