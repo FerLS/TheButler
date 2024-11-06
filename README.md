@@ -2,6 +2,8 @@
 
 **The Butler** es una webapp diseñada para hacer más eficiente y organizada la gestión de tareas del hogar, ya sea compartiendo responsabilidades o manteniendo a todos en casa informados. Con The Butler, puedes gestionar listas de compras compartidas en tiempo real, organizar la asistencia a las comidas y colaborar sin complicaciones.
 
+Esta app la hice para organizarme con mi familia, tiene sus fallos pero es funcional para cualquier persona
+
 ---
 
 ## Características Principales
